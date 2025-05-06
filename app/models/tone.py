@@ -13,7 +13,8 @@ class ToneSignature(Base):
     formality_score = Column(Float)  # via NLP
     address_style = Column(String)
     emotional_appeal = Column(String)
-    sentiment = Column(Float) # via NLP
+    sentiment_polarity = Column(Float) # via NLP
+    sentiment_subjectivity = Column(Float) # via NLP
     avg_sentence_length = Column(Float)  # via NLP
     passive_voice_ratio = Column(Float)  # via NLP
     source_text = Column(Text)

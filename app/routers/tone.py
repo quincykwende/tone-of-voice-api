@@ -27,9 +27,6 @@ async def create_signature(request: ToneSignatureCreate, db: Session = Depends(g
         llm_data = ToneManager.create_signature(request.source_text)
         nlp_data = ToneAnalyzer.analyze_text(request.source_text)
 
-        print("nlp_data", nlp_data)
-        print("llm_data", llm_data)
-
         signature_data = {
             "id": llm_data["id"],
             "tone": llm_data["tone"],
@@ -38,7 +35,8 @@ async def create_signature(request: ToneSignatureCreate, db: Session = Depends(g
             "formality_score": nlp_data["formality_score"],
             "address_style": llm_data["address_style"],
             "emotional_appeal": llm_data["emotional_appeal"],
-            "sentiment": nlp_data["sentiment"],
+            "sentiment_polarity": nlp_data["sentiment_polarity"],
+            "sentiment_subjectivity": nlp_data["sentiment_subjectivity"],
             "avg_sentence_length": nlp_data["avg_sentence_length"],
             "passive_voice_ratio": nlp_data["passive_voice_ratio"],
             "source_text": request.source_text,

@@ -18,7 +18,8 @@ class ToneAnalyzer:
             "avg_sentence_length": sum(len(sent) for sent in doc.sents) / len(list(doc.sents)),
             "passive_voice_ratio": sum(1 for token in doc if token.dep_ == "nsubjpass") / len(doc),
             "formality_score": ToneAnalyzer._calculate_formality(text),
-            "sentiment": TextBlob(text).sentiment.polarity
+            "sentiment_polarity": TextBlob(text).sentiment.polarity,
+            "sentiment_subjectivity": TextBlob(text).sentiment.subjectivity
         }
 
     @staticmethod

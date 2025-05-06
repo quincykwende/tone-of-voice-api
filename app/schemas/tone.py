@@ -14,7 +14,8 @@ class ToneSignatureResponse(BaseModel):
     formality_score: float
     address_style: str
     emotional_appeal: str
-    sentiment: float
+    sentiment_polarity: float
+    sentiment_subjectivity: float
     avg_sentence_length: float
     passive_voice_ratio: float
     source_text: str
