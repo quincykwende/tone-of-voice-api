@@ -1,4 +1,4 @@
-from openai import OpenAI
+from openai import AsyncOpenAI, OpenAI
 import os
 import json
 import uuid
@@ -6,8 +6,9 @@ import uuid
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class ToneManager:
+
     @staticmethod
-    def create_signature(source_text: str) -> dict:
+    def create_signature( source_text: str) -> dict:
         """
             Generate tone signature using OpenAI
         """
@@ -26,12 +27,13 @@ class ToneManager:
         """
 
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4.1-nano",
             messages=[{
                 "role": "user",
                 "content": prompt
             }],
-            response_format={"type": "json_object"}
+            response_format={"type": "json_object"},
+            temperature=0.7
         )
 
         result = json.loads(response.choices[0].message.content)
@@ -56,11 +58,12 @@ class ToneManager:
         """
 
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4.1-nano",
             messages=[
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": user_prompt}
-            ]
+            ],
+            temperature=0.8
         )
 
         return response.choices[0].message.content

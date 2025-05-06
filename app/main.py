@@ -1,5 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from app.database import engine, Base
+from app.routers.tone import router as tone_router
 from dotenv import load_dotenv
 import os
 
@@ -13,13 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from fastapi import FastAPI
-from app.database import engine, Base
-from app.routers.tone import router as tone_router
-
 Base.metadata.create_all(bind=engine)
-
-app = FastAPI()
 app.include_router(tone_router, prefix="/api/tone")
 
 @app.get("/")

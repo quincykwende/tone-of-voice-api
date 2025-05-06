@@ -13,7 +13,6 @@ class ToneAnalyzer:
             Extract measurable NLP features using spaCy + textblob
         """
         doc = nlp(text)
-        print(TextBlob(text).sentiment.polarity)
         return {
             "avg_sentence_length": sum(len(sent) for sent in doc.sents) / len(list(doc.sents)),
             "passive_voice_ratio": sum(1 for token in doc if token.dep_ == "nsubjpass") / len(doc),

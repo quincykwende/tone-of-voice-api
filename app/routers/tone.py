@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models.tone import ToneSignature
@@ -10,6 +10,8 @@ from app.schemas.tone import (
 from app.services.llm_service import ToneManager
 from app.services.nlp_analysis import ToneAnalyzer
 import uuid
+import textract
+import io
 
 router = APIRouter()
 
@@ -23,6 +25,7 @@ def get_db():
 
 @router.post("/signatures", response_model=ToneSignatureResponse)
 async def create_signature(request: ToneSignatureCreate, db: Session = Depends(get_db)):
+
     try:
         llm_data = ToneManager.create_signature(request.source_text)
         nlp_data = ToneAnalyzer.analyze_text(request.source_text)
@@ -41,8 +44,6 @@ async def create_signature(request: ToneSignatureCreate, db: Session = Depends(g
             "passive_voice_ratio": nlp_data["passive_voice_ratio"],
             "source_text": request.source_text,
         }
-
-        print(signature_data)
 
         db_signature = ToneSignature(**signature_data)
         db.add(db_signature)
@@ -73,3 +74,25 @@ async def generate_text(request: GenerationRequest, db: Session = Depends(get_db
         raise HTTPException(500, f"Generation failed: {str(e)}")
 
     return {"generated_text": generated_text}
+
+
+def extract_text_from_file(content: bytes, mime_type: str) -> str:
+    """
+        Extract text from various file formats
+    """
+    try:
+        extension = {
+            "text/plain": "txt",
+            "application/pdf": "pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx"
+        }.get(mime_type, "txt")
+
+        return textract.process(
+            file=io.BytesIO(content),
+            extension=extension
+        ).decode("utf-8").strip()
+
+    except textract.exceptions.ExtensionNotSupported:
+        raise ValueError("Unsupported file type")
+    except Exception as e:
+        raise ValueError(f"Text extraction error: {str(e)}")
