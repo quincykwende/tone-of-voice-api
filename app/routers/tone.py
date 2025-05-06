@@ -38,10 +38,13 @@ async def create_signature(request: ToneSignatureCreate, db: Session = Depends(g
             "formality_score": nlp_data["formality_score"],
             "address_style": llm_data["address_style"],
             "emotional_appeal": llm_data["emotional_appeal"],
+            "sentiment": nlp_data["sentiment"],
             "avg_sentence_length": nlp_data["avg_sentence_length"],
             "passive_voice_ratio": nlp_data["passive_voice_ratio"],
             "source_text": request.source_text,
         }
+
+        print(signature_data)
 
         db_signature = ToneSignature(**signature_data)
         db.add(db_signature)
