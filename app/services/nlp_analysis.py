@@ -1,10 +1,8 @@
 import spacy
 from textblob import TextBlob
-import uuid
 from typing import Dict
 
 nlp = spacy.load("en_core_web_sm")
-
 
 class ToneAnalyzer:
     @staticmethod

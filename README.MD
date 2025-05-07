@@ -25,16 +25,15 @@ pip install -r requirements.txt
 ### Create .env file:
 ```
 OPENAI_API_KEY=your_key_here
-```
-
-### Running with Uvicorn
-```bash
-uvicorn app.main:app --reload
-```
-
-### Running with fastapi
-```bash
-    fastapi dev app/main.py
+DATABASE_URL=postgresql://user:password@db:5432/tone_db
 ```
 
 ### Running with Docker
+```bash
+  docker-compose down -v && docker-compose up --build
+```
+
+### Visit Docs at 
+```
+http://localhost:8000/docs
+```

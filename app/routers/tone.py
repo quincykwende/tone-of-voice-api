@@ -9,8 +9,8 @@ from app.schemas.tone import (
 )
 from app.services.llm_service import ToneManager
 from app.services.nlp_analysis import ToneAnalyzer
-import uuid
-import textract
+from PyPDF2 import PdfReader
+from docx import Document
 import io
 
 router = APIRouter()
@@ -78,21 +78,22 @@ async def generate_text(request: GenerationRequest, db: Session = Depends(get_db
 
 def extract_text_from_file(content: bytes, mime_type: str) -> str:
     """
-        Extract text from various file formats
+    Extract text from various file formats without textract
     """
     try:
-        extension = {
-            "text/plain": "txt",
-            "application/pdf": "pdf",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx"
-        }.get(mime_type, "txt")
+        if mime_type == "text/plain":
+            return content.decode("utf-8")
 
-        return textract.process(
-            file=io.BytesIO(content),
-            extension=extension
-        ).decode("utf-8").strip()
+        elif mime_type == "application/pdf":
+            pdf = PdfReader(io.BytesIO(content))
+            return "\n".join([page.extract_text() for page in pdf.pages])
 
-    except textract.exceptions.ExtensionNotSupported:
-        raise ValueError("Unsupported file type")
+        elif mime_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            doc = Document(io.BytesIO(content))
+            return "\n".join([para.text for para in doc.paragraphs])
+
+        else:
+            raise ValueError("Unsupported file type")
+
     except Exception as e:
         raise ValueError(f"Text extraction error: {str(e)}")

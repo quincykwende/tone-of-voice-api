@@ -51,7 +51,10 @@ pycryptodome==3.22.0
 pydantic==2.11.4
 pydantic_core==2.33.2
 Pygments==2.19.1
+PyPDF2==3.0.1
+python-docx==1.1.2
 python-dotenv==1.1.0
+psycopg2-binary==2.9.9
 python-multipart==0.0.20
 python-pptx==0.6.23
 PyYAML==6.0.2
@@ -74,7 +77,6 @@ SQLAlchemy==2.0.40
 srsly==2.5.1
 starlette==0.46.2
 textblob==0.19.0
-textract==1.6.5
 thinc==8.3.6
 tqdm==4.67.1
 typer==0.15.3

@@ -25,5 +25,7 @@ async def root():
 # Verify OpenAI key on startup
 @app.on_event("startup")
 async def startup():
-    if not os.getenv("OPENAI_API_KEY"):
-        raise RuntimeError("OPENAI_API_KEY not set i .env")
+    REQUIRED_ENV_VARS = ["OPENAI_API_KEY", "DATABASE_URL"]
+    missing = [var for var in REQUIRED_ENV_VARS if not os.getenv(var)]
+    if missing:
+        raise RuntimeError(f"Missing environment variables in .env: {', '.join(missing)}")

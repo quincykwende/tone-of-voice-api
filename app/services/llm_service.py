@@ -1,4 +1,4 @@
-from openai import AsyncOpenAI, OpenAI
+from openai import OpenAI
 import os
 import json
 import uuid
@@ -50,11 +50,15 @@ class ToneManager:
         """
         system_message = f"""
         Use the following guidelines to generate the response:
-        - Tone: {signature['tone']}
-        - Style: {signature['language_style']}
-        - Formality: {signature['formality_level']}/1.0
-        - Address: {signature['address_style']}
-        - Emotional appeal: {signature['emotional_appeal']}
+        - tone: {signature['tone']}
+        - style: {signature['language_style']}
+        - formality: {signature['formality_level']}/1.0
+        - address: {signature['address_style']}
+        - emotional_appeal: {signature['emotional_appeal']}
+        - sentiment_polarity: {signature['sentiment_polarity']}
+        - sentiment_subjectivity: {signature['sentiment_subjectivity']}
+        - avg_sentence_length: {signature['avg_sentence_length']}
+        - passive_voice_ratio: {signature['passive_voice_ratio']}
         """
 
         response = client.chat.completions.create(
@@ -64,6 +68,7 @@ class ToneManager:
                 {"role": "user", "content": user_prompt}
             ],
             temperature=0.8
+
         )
 
         return response.choices[0].message.content
