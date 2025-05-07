@@ -11,7 +11,7 @@ An AI-powered text analysis + generation system that preserves brand voice chara
 ## Prerequisites
 - Python 3.12
 - OpenAI API key
-- Docker (optional)
+- Docker
 
 ## Installation
 ```bash
